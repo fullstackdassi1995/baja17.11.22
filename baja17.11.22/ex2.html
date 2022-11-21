@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="ex2.css">
+
+</head>
+<body>
+    <br>
+    <button class="button1" onclick="add_per()" style="margin-left:10%;">add a person</button>
+    <button class="button1" onclick="less_per()" style="float:right; margin-right: 10%;"  >remove a row</button>
+      <br><br>  
+        <table class="container" id="my_table">
+            <thead>
+                <tr>
+                    <th><h1>First name</h1></th>
+                    <th><h1>Last name</h1></th>
+                    <th><h1>over 18 ?</h1></th>
+                    <th><h1>address</h1></th>
+                    <th><h1>gender</h1></th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    
+
+    <script>
+        let per_sons = 0
+
+        function add_per(){
+            if (per_sons >= 10){
+            return tnay_error();
+            }
+            
+            $.ajax({
+                url: "https://randomuser.me/api",
+                success: response => {
+                    $('#my_table').append(`
+                        <tr>
+                            <td> ${response.results[0].name.first} </td>
+                            <td> ${response.results[0].name.last} </td>
+                            <td> ${response.results[0].dob.age >= 18 == true ? "Yes" : "No"} </td>
+                            <td> ${response.results[0].location.street.name + " " + response.results[0].location.street.number +" " + response.results[0].location.city} </td>
+                            <td> ${response.results[0].gender} </td>
+                        </tr>`                 
+                    )
+                }
+            })
+            per_sons++
+        }
+
+    function tnay_error(){
+
+        try {
+            const err = new Error();
+            throw err;
+        }
+        catch (error){
+            
+            Swal.fire({
+                icon: 'error',
+                title: '<img src="hand.jfif">',
+                text: 'No more than 10 people allowed!',
+                })
+        }
+    
+    }
+
+    function less_per(){
+        if (per_sons == 0){
+            return my2_error()
+        }
+        document.getElementsByTagName("tr")[per_sons].remove();
+        per_sons--
+    }
+
+    function my2_error(){
+        try {
+            const err = new Error();
+            throw err;
+        }
+        catch (error){
+            
+            Swal.fire({
+                icon: 'error',
+                title: 'Heyyyyyy!',
+                text: 'There is nothing to remove!',
+                })
+        }
+    }
+
+    </script>
+</body>
+</html>
